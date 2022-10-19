@@ -119,8 +119,9 @@ More details to follow!
 </table>
 <br/>
 <h2 class="blackpar_title" id="organizers">Organizers</h2>
-<div class="row_perso">
+<!-- <div class="row_perso">
     <p>
         {% include organizers.html %}
     </p>
 </div>
+ -->
