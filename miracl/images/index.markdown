@@ -206,6 +206,6 @@ For both tracks, the participants are evaluated on a combination of the model's 
 <h2 class="blackpar_title" id="organizers">Organizers</h2>
 <div class="row_perso">
 	<p>
-		{% include organizers.html %}
+		<!-- {% include organizers.html %} -->
 	</p>
 </div>

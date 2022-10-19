@@ -1,13 +1,30 @@
 r0:
   bold: 'true'
   lang: 'Lang'
-  q: 'Queries'
-  j: 'Judgments'
-  pr: 'Positive Relevance'
-  avg: 'Avg Positive Relevance'
-  size: 'Collection Size'
+  q_train: 'Train'
+  j_train: ''
+  q_dev: 'Dev'
+  j_dev: ''
+  q_test_a: 'Test-A'
+  j_test_a: ''
+  q_test_b: 'Test-B'
+  j_test_b: ''
+
 
 r1:
+  bold: 'true'
+  lang: 'Lang'
+  q_train: '# Q'
+  j_train: '# J'
+  q_dev: '# Q'
+  j_dev: '# J'
+  q_test_a: '# Q'
+  j_test_a: '# J'
+  q_test_b: '# Q'
+  j_test_b: '# J'
+
+
+r2:
   lang: 'Arabic (ar)'
   q_train: '3495'
   j_train: '25382'
@@ -18,7 +35,7 @@ r1:
   q_test_b: '1405'
   j_test_b: '14036'
 
-r2:
+r3:
   lang: 'Bengali (bn)'
   q_train: '1631'
   j_train: '16754'
@@ -29,7 +46,7 @@ r2:
   q_test_b: '1130'
   j_test_b: '11286'
 
-r3:
+r4:
   lang: 'English (en)'
   q_train: '2863'
   j_train: '29416'
@@ -40,7 +57,7 @@ r3:
   q_test_b: '1790'
   j_test_b: '18241'
 
-r4:
+r5:
   lang: 'Spanish (es)'
   q_train: '2162'
   j_train: '21531'
@@ -51,7 +68,7 @@ r4:
   q_test_b: '1515'
   j_test_b: '15074'
 
-r5:
+r6:
   lang: 'Persian (fa)'
   q_train: '2107'
   j_train: '21844'
@@ -62,7 +79,7 @@ r5:
   q_test_b: '1476'
   j_test_b: '15313'
 
-r6:
+r7:
   lang: 'Finnish (fi)'
   q_train: '2897'
   j_train: '20350'
@@ -73,7 +90,7 @@ r6:
   q_test_b: '711'
   j_test_b: '7100'
 
-r7:
+r8:
   lang: 'French (fr)'
   q_train: '1143'
   j_train: '11426'
@@ -84,7 +101,7 @@ r7:
   q_test_b: '801'
   j_test_b: '8008'
 
-r8:
+r9:
   lang: 'Hindi (hi)'
   q_train: '1169'
   j_train: '11668'
@@ -95,7 +112,7 @@ r8:
   q_test_b: '819'
   j_test_b: '8169'
  
-r9:
+r10:
   lang: 'Indonesian (id)'
   q_train: '4071'
   j_train: '41358'
@@ -106,7 +123,7 @@ r9:
   q_test_b: '611'
   j_test_b: '6098'
 
-r10:
+r11:
   lang: 'Japanese (ja)'
   q_train: '3477'
   j_train: '34387'
@@ -117,7 +134,7 @@ r10:
   q_test_b: '1141'
   j_test_b: '11410'
 
-r11:
+r12:
   lang: 'Korean (ko)'
   q_train: '868'
   j_train: '12767'
@@ -128,7 +145,7 @@ r11:
   q_test_b: '1417'
   j_test_b: '14161'
 
-r12:
+r13:
   lang: 'Russian (ru)'
   q_train: '4683'
   j_train: '33921'
@@ -139,7 +156,7 @@ r12:
   q_test_b: '718'
   j_test_b: '7174'
 
-r13:
+r14:
   lang: 'Swahili (sw)'
   q_train: '1901'
   j_train: '9359'
@@ -150,7 +167,7 @@ r13:
   q_test_b: '465'
   j_test_b: '4620'
 
-r14:
+r15:
   lang: 'Telugu (te)'
   q_train: '3452'
   j_train: '18608'
@@ -161,7 +178,7 @@ r14:
   q_test_b: '793'
   j_test_b: '7920'
 
-r15:
+r16:
   lang: 'Thai (th)'
   q_train: '2972'
   j_train: '21293'
@@ -172,7 +189,7 @@ r15:
   q_test_b: '650'
   j_test_b: '6493'
 
-r16:
+r17:
   lang: 'Chinese (zh)'
   q_train: '1312'
   j_train: '13113'
