@@ -113,3 +113,77 @@ div.container a:visited{color:#2274bb;text-decoration:none}
 .highlight{color:#2274bb;font-weight:600}
 .highlight:hover{color:#1673c5;font-weight:600}
 .hide{display:none}
+
+/* .news-scroll {
+    height: 200px;
+    overflow-y: auto;
+    padding-right: 10px;
+    position: relative;
+} 
+.news-scroll::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 30px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1));
+    pointer-events: none;
+}
+.news-scroll::-webkit-scrollbar {
+    width: 8px;
+}
+.news-scroll::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+.news-scroll::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+.news-scroll::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+.news-scroll ul {
+    padding-bottom: 30px;
+}  */
+
+
+.news-scroll-container {
+    position: relative;
+    height: 150px;
+    overflow: hidden;
+}
+
+.news-scroll {
+    height: 100%;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.news-scroll::-webkit-scrollbar {
+    width: 8px;
+}
+
+.news-scroll::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.news-scroll::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.news-scroll::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.fade-effect {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 30px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1));
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
