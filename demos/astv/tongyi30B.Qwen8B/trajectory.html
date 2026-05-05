@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ASTV Demo — Cache Trajectories</title>
+<link rel="stylesheet" href="trajectory_assets/styles.css">
+</head>
+<body>
+
+<h1>ASTV Demo — Cache Trajectories</h1>
+<div class="subtitle">Each card = one query's search trajectory. Each row = a cluster (swim lane). Bars = search rounds placed on their cluster's row.</div>
+
+<div id="layout">
+<aside id="sidebar">
+    <div class="cluster-color-legend" title="Each round's color = its position on a 1D projection (MDS or Fiedler) of the round-embedding cosine-similarity matrix, scaled to [0, 1]. Cluster lane labels use the mean of their rounds' positions.">
+        <span class="ccl-label">Color = 1D projection of round embeddings (per query)</span>
+        <div>
+            <div class="ccl-bar"></div>
+            <div class="ccl-ticks">
+                <span>0.00</span>
+                <span>0.50</span>
+                <span>1.00</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <div class="sort-control">
+            <span class="sort-label">Sort by:</span>
+            <div class="sort-buttons" id="sort-buttons" role="group" aria-label="Sort by">
+                <button type="button" class="sort-btn" data-sort-key="query_id">Query ID<span class="sort-arrow"></span></button>
+                <button type="button" class="sort-btn" data-sort-key="num_rounds"># rounds<span class="sort-arrow"></span></button>
+                <button type="button" class="sort-btn" data-sort-key="correct">Correct<span class="sort-arrow"></span></button>
+                <button type="button" class="sort-btn" data-sort-key="completed">Completed<span class="sort-arrow"></span></button>
+            </div>
+        </div>
+        <div class="sort-control" title="How cluster rows (swim lanes) are ordered within each card. Time: by the round index where each cluster first appears. Relevance: by ascending mean MDS scalar over the unique docs in each cluster (same metric as the lane label color), so rows go red → blue (ties break on first-appearance order). Single row: collapse all rounds into one lane (no cluster grouping).">
+            <span class="sort-label">Cluster row order:</span>
+            <div class="sort-buttons" id="lane-order-buttons" role="group" aria-label="Cluster row order">
+                <button type="button" class="sort-btn" data-lane-order="time">Time<span class="sort-arrow"></span></button>
+                <button type="button" class="sort-btn" data-lane-order="relevance">Relevance<span class="sort-arrow"></span></button>
+                <button type="button" class="sort-btn" data-lane-order="flat">Single row<span class="sort-arrow"></span></button>
+            </div>
+        </div>
+        <label title="Merge clusters whose retrieved-doc sets share at least N documents. 'None' disables merging. Sequence: 1, 2, …, 10, None.">Doc-overlap threshold:
+            <span class="dot-stepper">
+                <button type="button" id="dot-dec" aria-label="decrease">−</button>
+                <input type="text" id="dot-input" readonly value="3" data-max="10">
+                <button type="button" id="dot-inc" aria-label="increase">+</button>
+            </span>
+        </label>
+        <label>Search:
+            <input type="text" id="search-box" placeholder="query text or ID...">
+        </label>
+        <div class="sort-control" id="tag-control" title="Toggle which doc tags get marked above the search-round bars. Solid glyph = the round retrieved a tagged doc for the first time; hollow glyph = the round retrieved a tagged doc that an earlier round already covered.">
+            <span class="sort-label">Doc tags:</span>
+            <div class="sort-buttons" id="tag-buttons" role="group" aria-label="Doc tags"></div>
+        </div>
+    </div>
+
+    <div id="legend" class="legend"></div>
+    <div id="stats" class="stats"></div>
+    <div id="overview" class="overview">
+        <div class="ov-cell"><div class="ov-title" id="ov-correct-title">Correct / Wrong / Unknown</div><canvas id="ov-correct"></canvas></div>
+        <div class="ov-cell"><div class="ov-title">Avg new docs / round (0-5)</div><canvas id="ov-novelty"></canvas></div>
+        <div class="ov-cell"><div class="ov-title"># Search rounds</div><canvas id="ov-rounds"></canvas></div>
+        <div class="ov-cell"><div class="ov-title"># Topic clusters</div><canvas id="ov-clusters"></canvas></div>
+    </div>
+</aside>
+
+<main id="main">
+    <div id="grid" class="grid"></div>
+</main>
+</div>
+
+<div id="tooltip" class="tooltip"></div>
+<div id="detail-modal" class="modal-backdrop">
+    <div class="modal-panel">
+        <button class="modal-close" id="detail-close" title="Close">×</button>
+        <div class="detail-grid">
+            <div class="detail-left">
+                <h2 id="detail-title"></h2>
+                <div class="modal-sub" id="detail-sub"></div>
+                <div class="detail-controls">
+                    <button type="button" class="dt-toggle-ctx"
+                            id="detail-toggle-ctx" data-state="collapsed">
+                        Expand all context
+                    </button>
+                    <button type="button" class="dt-toggle-ctx"
+                            id="detail-toggle-indirect" data-state="hidden"
+                            title="Also draw dashed arcs to every earlier subquery / context doc that mentioned the same term (the primary edge points to the most-recent occurrence; everything before that is indirect).">
+                        Show indirect dependencies
+                    </button>
+                </div>
+                <div class="modal-query" id="detail-query"></div>
+                <div class="modal-answers" id="detail-answers"></div>
+            </div>
+            <div class="detail-right">
+                <div class="detail-deptree" id="detail-deptree">
+                    <div class="dt-container" id="detail-dt-container">
+                        <div class="dt-scol" id="detail-dt-scol"></div>
+                        <svg class="dt-edges" id="detail-dt-edges"></svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="trajectory_assets/app.js"></script>
+</body>
+</html>

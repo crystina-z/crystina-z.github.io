@@ -1,0 +1,829 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #f8f9fa;
+    color: #333;
+    padding: 20px;
+}
+h1 {
+    text-align: center;
+    margin-bottom: 8px;
+    font-size: 1.5rem;
+}
+.subtitle {
+    text-align: center;
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+}
+#layout {
+    display: grid;
+    grid-template-columns: 320px minmax(0, 1fr);
+    gap: 18px;
+    align-items: start;
+}
+#sidebar {
+    background: #fff;
+    border-radius: 8px;
+    padding: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 0;
+    position: sticky;
+    top: 12px;
+    max-height: calc(100vh - 24px);
+    overflow-y: auto;
+}
+#main {
+    min-width: 0;
+}
+@media (max-width: 800px) {
+    #layout {
+        grid-template-columns: 1fr;
+    }
+    #sidebar {
+        position: static;
+        max-height: none;
+        overflow-y: visible;
+    }
+}
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 0;
+    align-items: stretch;
+}
+.controls label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+.controls label > input,
+.controls label > select {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+.controls label > .dot-stepper {
+    flex: 0 0 auto;
+    margin-left: auto;
+    max-width: 50%;
+}
+.controls select, .controls input {
+    padding: 4px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+.sort-control {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+.sort-buttons {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+.sort-btn {
+    flex: 1 1 calc(50% - 2px);
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    text-align: left;
+    line-height: 1.2;
+}
+.sort-btn:hover {
+    background: #f3f4f6;
+}
+.sort-btn.active {
+    background: #6C8EBF;
+    color: #fff;
+    border-color: #6C8EBF;
+}
+.sort-btn .sort-arrow {
+    flex: 0 0 auto;
+    font-size: 0.95rem;
+    line-height: 1;
+    min-width: 0.85em;
+    text-align: right;
+}
+.sort-btn .tag-glyph {
+    flex: 0 0 auto;
+    font-size: 0.95rem;
+    line-height: 1;
+    min-width: 0.85em;
+    text-align: left;
+}
+.sort-btn .tag-name {
+    flex: 1 1 auto;
+    text-align: left;
+}
+.sort-btn:not(.active) .tag-glyph {
+    opacity: 0.45;
+}
+#search-box {
+    width: 100%;
+}
+.dot-stepper {
+    display: inline-flex;
+    align-items: stretch;
+    vertical-align: middle;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    overflow: hidden;
+}
+.dot-stepper button {
+    background: #f3f4f6;
+    border: none;
+    padding: 2px 10px;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    color: #333;
+    user-select: none;
+}
+.dot-stepper button:hover:not(:disabled) {
+    background: #e5e7eb;
+}
+.dot-stepper button:disabled {
+    color: #bbb;
+    cursor: not-allowed;
+}
+.dot-stepper #dot-input {
+    border: none;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    flex: 0 0 auto;
+    width: 3em;
+    min-width: 0;
+    text-align: center;
+    padding: 2px 4px;
+    font-size: 0.85rem;
+    font-variant-numeric: tabular-nums;
+    background: #fff;
+    color: #222;
+}
+.cluster-color-legend {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    margin: 0;
+    font-size: 0.78rem;
+    color: #555;
+}
+.cluster-color-legend .ccl-label {
+    white-space: normal;
+    line-height: 1.3;
+}
+.cluster-color-legend .ccl-bar {
+    position: relative;
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+    background: linear-gradient(to right, #c6546a 0%, #dd7750 10%, #df8b40 20%, #e9b94b 30%, #c0d55b 40%, #69b771 50%, #5db294 60%, #5db0bc 70%, #5cacca 80%, #5499d4 90%, #5983d6 100%);
+    border: 1px solid #bbb;
+}
+.cluster-color-legend .ccl-ticks {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    color: #666;
+    font-variant-numeric: tabular-nums;
+}
+.legend {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+.legend:empty { display: none; }
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8rem;
+}
+.legend-swatch {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    border: 1px solid rgba(0,0,0,0.2);
+}
+.grid {
+    --card-min: 520px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--card-min), 1fr));
+    gap: 16px;
+}
+.card-resize {
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    width: 14px;
+    height: 14px;
+    cursor: nwse-resize;
+    background:
+        linear-gradient(135deg,
+            transparent 0%, transparent 40%,
+            rgba(0,0,0,0.25) 40%, rgba(0,0,0,0.25) 50%,
+            transparent 50%, transparent 65%,
+            rgba(0,0,0,0.25) 65%, rgba(0,0,0,0.25) 75%,
+            transparent 75%);
+    z-index: 4;
+    border-bottom-right-radius: 8px;
+}
+.card-resize:hover {
+    background-color: rgba(108,142,191,0.15);
+}
+.card { position: relative; }
+.card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    overflow: hidden;
+    border: 2.4px solid transparent;
+}
+.card.incomplete {
+    border-color: #d4d4d4;
+}
+.card-header {
+    padding: 10px 14px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.card-header h3 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    position: relative;
+    cursor: default;
+}
+.card-header h3 .query-preview {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 4px;
+    background: rgba(30,30,30,0.94);
+    color: #fff;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 0.78rem;
+    font-weight: 400;
+    line-height: 1.45;
+    white-space: normal;
+    width: max-content;
+    max-width: 420px;
+    text-align: left;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    z-index: 20;
+}
+.card-header h3:hover .query-preview {
+    display: block;
+}
+.card-header .meta {
+    font-size: 0.75rem;
+    color: #888;
+}
+.card-header .title-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.chart-container {
+    position: relative;
+    padding: 10px 14px 14px;
+}
+canvas {
+    width: 100% !important;
+}
+.answer-btn {
+    /* sits inline next to the query id in .card-header .title-group;
+       position:relative is kept so the .answer-popup descendant (which
+       uses top:100%; right:0) still anchors to the badge. */
+    position: relative;
+    background: rgba(100,100,100,0.12);
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 4px;
+    padding: 2px 7px;
+    font-size: 0.7rem;
+    color: #555;
+    cursor: default;
+    line-height: 1.3;
+    user-select: none;
+}
+.answer-btn .answer-popup {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 4px;
+    background: rgba(30,30,30,0.94);
+    color: #fff;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 0.78rem;
+    line-height: 1.45;
+    white-space: normal;
+    width: max-content;
+    max-width: 420px;
+    text-align: left;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    z-index: 10;
+}
+.answer-btn:hover .answer-popup {
+    display: block;
+}
+.answer-popup .ans-label {
+    font-weight: 600;
+    color: #aaa;
+    margin-right: 4px;
+}
+.answer-popup .ans-gt {
+    color: #b0d4b0;
+}
+.answer-popup .ans-correct {
+    color: #81c784;
+}
+.answer-popup .ans-wrong {
+    color: #ef9a9a;
+}
+.answer-popup .ans-neutral {
+    color: #e0e0e0;
+}
+.answer-popup .ans-row {
+    margin-bottom: 4px;
+}
+.answer-btn .status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-right: 3px;
+    vertical-align: middle;
+}
+.status-dot.correct { background: #4caf50; }
+.status-dot.wrong { background: #e53935; }
+.status-dot.unknown { background: #999; }
+.tooltip {
+    position: fixed;
+    background: rgba(30,30,30,0.92);
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    pointer-events: none;
+    max-width: 450px;
+    z-index: 1000;
+    line-height: 1.4;
+    display: none;
+}
+.hidden { display: none !important; }
+.stats {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #666;
+}
+.overview {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+    background: transparent;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
+}
+.overview .ov-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    background: #fafafa;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    padding: 6px 8px;
+}
+.overview .ov-title {
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: #444;
+    text-align: center;
+    margin-bottom: 8px;
+}
+.overview canvas {
+    width: 100% !important;
+    height: 130px !important;
+}
+/* Horizontal-bar panels (Correct/Wrong/Unknown, Avg new docs/round) are
+   sized to fit their fixed number of rows — see drawOverviewChartHorizontal:
+   row=15px, gap=10px, top+bottom pad=4px. */
+#ov-correct { height: 58px !important; }   /* 3 rows */
+#ov-novelty { height: 96px !important; }   /* 5 rows */
+.card {
+    transition: box-shadow 0.15s, transform 0.15s;
+}
+.card:hover {
+    box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+}
+.card { cursor: pointer; }
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    z-index: 2000;
+    overflow: auto;
+    padding: 40px 20px;
+}
+.modal-backdrop.visible { display: flex; }
+.modal-panel {
+    background: #fff;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 1500px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+    padding: 22px 26px 26px;
+    position: relative;
+}
+/* Detail-modal subquery dependency tree.
+   Two-column layout: left column is sticky and holds the question +
+   answers; right column holds the per-round subquery cards with an SVG
+   overlay for arcs. The container intentionally has no inner scroll —
+   the modal-backdrop is the sole scroll surface, so SVG arc anchors
+   stay aligned with their boxes even on long trajectories (otherwise
+   the SVG would be sized to the inner-scroll viewport and arcs to
+   off-screen rounds would clip). */
+.detail-grid {
+    display: grid;
+    grid-template-columns: 380px minmax(0, 1fr);
+    gap: 18px;
+    align-items: start;
+    margin-top: 4px;
+}
+.detail-left {
+    position: sticky;
+    top: 16px;
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
+    min-width: 0;
+}
+/* Zero out margins on items that live in the sticky left column so the
+   flex gap is the sole source of vertical spacing — otherwise margins
+   stack on top of the gap and push content downward unevenly. */
+.detail-left h2,
+.detail-left .modal-sub,
+.detail-left .modal-query,
+.detail-left .modal-answers {
+    margin-bottom: 0;
+}
+.detail-right {
+    min-width: 0;
+}
+.detail-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.dt-toggle-ctx {
+    background: #eceff1;
+    border: 1px solid #b0bec5;
+    color: #37474f;
+    font-size: 0.74rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.dt-toggle-ctx:hover { background: #cfd8dc; }
+.dt-toggle-ctx.active {
+    background: #455a64;
+    border-color: #455a64;
+    color: #fff;
+}
+.dt-toggle-ctx.active:hover { background: #37474f; }
+/* Indirect (dashed) context dependencies: hidden by default — toggle
+   the button on the controls strip to add .dt-show-indirect on .dt-scol
+   and reveal them. The dashed-arc gating happens in JS (dtDrawEdges
+   skips dashed entries when the class is absent); these CSS rules cover
+   the secondary token-group labels and any ctx-item that has only
+   secondary attributions, so they don't render as orphan rows. */
+.dt-scol:not(.dt-show-indirect) .dt-ctx-tokens-2nd { display: none; }
+.dt-scol:not(.dt-show-indirect) .dt-ctx-only-2nd { display: none; }
+.detail-deptree {
+    margin-top: 0;
+}
+.dt-container {
+    position: relative;
+    padding-left: 96px;
+}
+.dt-scol {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.dt-edges {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: visible;
+}
+/* Each round renders as a flex row: the colored sq-box on the left
+   (bar inside encodes #unique docs; border + bar color = MDS scalar)
+   and tag glyphs sitting OUTSIDE the box on the right. The marks
+   stay flush against the deptree column edge so they're easy to
+   scan vertically across rounds. */
+.dt-sq-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.dt-sq-box {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+    /* Light, thin neutral border — colored cues now live entirely on the
+       novelty bar (right side) and the dependency arcs, so the card frame
+       stays out of the way. */
+    border: 1px solid #e0e4e8;
+    border-radius: 8px;
+    padding: 10px 12px;
+    background: #fff;
+    overflow: hidden;
+    transition: opacity 0.15s ease;
+}
+/* Row-level fade dims the box + novelty bar + tag glyphs together so a
+   non-chain round visually recedes as a unit while a hover is active. */
+.dt-sq-row.dt-faded,
+.dt-ctx-item.dt-faded {
+    opacity: 0.18;
+}
+.dt-sq-row { transition: opacity 0.15s ease; }
+/* Tally-style novelty indicator: maxNew thin vertical slots per row,
+   the first newDocs of which are colored. Container width = maxNew
+   slots + gaps, identical on every row in the column, so the marks
+   span downstream stays aligned. Empty slots are invisible — only
+   filled ticks read as "this round added a new doc". */
+.dt-sq-novbar {
+    flex: 0 0 auto;
+    align-self: center;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+.dt-sq-novtick {
+    flex: 0 0 3px;
+    width: 3px;
+    height: 14px;
+    border-radius: 1.5px;
+    background: transparent;
+}
+.dt-scol.compact .dt-sq-novtick {
+    flex-basis: 2px;
+    width: 2px;
+    height: 10px;
+}
+.dt-sq-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 8px;
+    row-gap: 6px;
+}
+.dt-sq-head {
+    flex: 0 0 auto;
+    font-size: 0.72rem;
+    color: #455a64;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+.dt-sq-marks-outer {
+    flex: 0 0 64px;
+    min-width: 64px;
+    font-size: 1rem;
+    line-height: 1;
+    white-space: nowrap;
+    color: #555;
+    text-align: left;
+}
+.dt-sq-text {
+    flex: 1 1 0;
+    min-width: 0;
+    font-size: 0.82rem;
+    line-height: 1.45;
+    margin: 0;
+    color: #1c2126;
+    word-break: break-word;
+}
+/* Token-source palette: shared with the token-status strips on the
+   main page. Border/bg use the palette hue directly; text uses a
+   darker variant so it stays readable against the tinted background. */
+.dt-qterm {
+    color: #3F5F95; font-weight: 600;
+    background: rgba(91, 130, 197, 0.14);
+    padding: 0 2px; border-radius: 2px;
+}
+.dt-prevterm {
+    color: #A87729; font-weight: 600;
+    background: rgba(227, 169, 88, 0.18);
+    border: 1px solid #E3A958;
+    padding: 0 3px; border-radius: 3px;
+    margin: 0 1px; cursor: help;
+}
+.dt-newterm {
+    color: #5C7A47; font-weight: 600;
+    background: rgba(132, 163, 112, 0.18);
+    border: 1px solid #84A370;
+    padding: 0 3px; border-radius: 3px;
+    margin: 0 1px;
+}
+.dt-ungroundedterm {
+    color: #9F4F45; font-weight: 600;
+    background: rgba(199, 120, 110, 0.18);
+    border: 1px solid #C7786E;
+    padding: 0 3px; border-radius: 3px;
+    margin: 0 1px;
+}
+.dt-ctx-list {
+    /* Wraps onto its own row inside the flex .dt-sq-content so it sits
+       below the head + subquery line. row-gap on the parent already
+       provides vertical separation; padding-top + dashed top border give
+       the visual divider that used to live on margin-top. */
+    flex: 1 0 100%;
+    padding-top: 8px;
+    border-top: 1px dashed #cfd8dc;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.dt-ctx-item {
+    font-size: 0.73rem;
+    line-height: 1.45;
+    padding: 5px 8px;
+    background: rgba(132, 163, 112, 0.10);
+    border-left: 3px solid #84A370;
+    border-radius: 3px;
+    color: #2C3A25;
+    transition: opacity 0.15s ease;
+}
+.dt-ctx-tokens {
+    font-weight: 700; color: #5C7A47; margin-right: 6px;
+}
+/* Secondary attribution: this doc also contained the term but a later
+   doc was the most-recent (primary) source. Rendered with a dashed
+   underline + lighter color to mirror the dashed arc on the SVG. */
+.dt-ctx-tokens-2nd {
+    font-weight: 600;
+    color: #7A9764;
+    border-bottom: 1px dashed #7A9764;
+    cursor: help;
+}
+.dt-ctx-meta {
+    color: #6E8458; font-size: 0.66rem; margin-left: 4px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.dt-ctx-text {
+    display: block; margin-top: 3px; color: #2c3a25;
+}
+/* Compact mode (Collapse-all-context): hide every context card; the
+   subquery text still wraps so long queries stay readable on multiple
+   lines. The base layout is a flex row (head + text + ctx-list with
+   flex-basis 100%), so compact mode only needs to hide ctx-list and
+   tighten padding; nothing else changes. */
+.dt-scol.compact .dt-ctx-list { display: none; }
+.dt-scol.compact .dt-sq-box { padding: 4px 10px; }
+.modal-panel h2 {
+    font-size: 1.05rem;
+    margin-bottom: 4px;
+}
+.modal-panel .modal-sub {
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom: 6px;
+}
+.modal-panel .modal-query {
+    font-size: 0.85rem;
+    color: #333;
+    margin-bottom: 14px;
+    padding: 8px 10px;
+    background: #f3f4f6;
+    border-radius: 6px;
+    line-height: 1.45;
+}
+/* Hover-narrowed state: when the user hovers a subquery row, dim all
+   surrounding text (in-between text nodes inherit this color) plus the
+   non-matching question-token spans, so only the round's own question
+   tokens — flagged with .is-hover-match — stay vivid. */
+.modal-panel .modal-query.dimmed { color: #c0c8d2; }
+.modal-panel .modal-query.dimmed .dt-qterm {
+    color: #c0c8d2;
+    background: transparent;
+}
+.modal-panel .modal-query.dimmed .dt-qterm.is-hover-match {
+    color: #3F5F95;
+    background: rgba(91, 130, 197, 0.14);
+}
+.modal-panel .modal-answers {
+    margin-bottom: 14px;
+    padding: 8px 10px;
+    background: #f3f4f6;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: #333;
+}
+.modal-panel .modal-answers:empty {
+    display: none;
+}
+.modal-panel .modal-answers .ans-content {
+    position: relative;
+    max-height: 7.5em;          /* ~5 lines collapsed */
+    overflow: hidden;
+}
+.modal-panel .modal-answers.expanded .ans-content {
+    max-height: none;
+}
+.modal-panel .modal-answers.has-overflow:not(.expanded) .ans-content::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 2.5em;
+    background: linear-gradient(to bottom,
+        rgba(243, 244, 246, 0) 0%,
+        rgba(243, 244, 246, 1) 100%);
+    pointer-events: none;
+}
+.modal-panel .modal-answers .ans-toggle {
+    display: none;
+    margin-top: 4px;
+    padding: 2px 0 0;
+    background: none;
+    border: none;
+    color: #4a6fa5;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+.modal-panel .modal-answers .ans-toggle:hover {
+    color: #2c4a78;
+    text-decoration: underline;
+}
+.modal-panel .modal-answers.has-overflow .ans-toggle {
+    display: inline-block;
+}
+.modal-panel .modal-answers .ans-row + .ans-row {
+    margin-top: 6px;
+}
+.modal-panel .modal-answers .ans-label {
+    font-weight: 600;
+    color: #555;
+    margin-right: 6px;
+}
+.modal-panel .modal-answers .ans-gt { color: #2e7d32; }
+.modal-panel .modal-answers .ans-correct { color: #2e7d32; }
+.modal-panel .modal-answers .ans-wrong { color: #c62828; }
+.modal-panel .modal-answers .ans-neutral { color: #757575; }
+.modal-panel .modal-close {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    background: transparent;
+    border: none;
+    font-size: 1.4rem;
+    cursor: pointer;
+    color: #666;
+    line-height: 1;
+}

@@ -1,0 +1,26 @@
+{
+  "runname": "run-8e2ddca4",
+  "hyperparameters": {
+    "min_cluster_size": 2,
+    "min_samples": 1,
+    "allow_single_cluster": true,
+    "cluster_selection_epsilon": 0.0,
+    "cluster_selection_method": "eom",
+    "doc_overlap_threshold": 3
+  },
+  "num_queries": 830,
+  "num_queries_with_eval": 744,
+  "cluster_statistics": {
+    "total_clusters": 6242,
+    "clustered_points": 20352,
+    "total_points": 25207,
+    "pct_clustered": 80.74,
+    "avg_cluster_size": 3.2605,
+    "std_cluster_size": 2.5723
+  },
+  "cluster_evaluation_avg": {
+    "silhouette_score": 0.3335293438085305,
+    "davies_bouldin_score": 0.9220981883104893,
+    "calinski_harabasz_score": 7.912311582509011
+  }
+}
